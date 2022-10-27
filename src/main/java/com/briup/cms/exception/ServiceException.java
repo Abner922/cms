@@ -17,5 +17,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 public class ServiceException extends RuntimeException{
     //设置属性表示异常的原因
+    private ResultCode resultCode;
 
+    //为了在全局异常处理器中获取异常原因的异常状态码
+    public ServiceException(ResultCode resultCode) {
+        super(resultCode.message());
+        this.resultCode = resultCode;
+    }
+
+    public ResultCode getResultCode() {
+        return resultCode;
+    }
 }

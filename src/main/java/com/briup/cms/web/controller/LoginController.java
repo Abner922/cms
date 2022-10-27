@@ -11,9 +11,12 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.awt.*;
 
 /**
  * @author SDX
@@ -29,10 +32,12 @@ public class LoginController {
 
     @ApiOperation("用户登录")
     @ApiImplicitParams({
-            @ApiImplicitParam()
+            @ApiImplicitParam(name = "username", value = "用户名", required = true),
+            @ApiImplicitParam(name = "password", value = "密码", required = true)
     })
-    @PostMapping("/login")
+    @PostMapping(value = "/login",consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Result Login(String username, String password){
-        return Result.success();
+        String token = service.login(username, password);
+        return Result.success(token);
     }
 }

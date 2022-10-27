@@ -59,14 +59,16 @@ public class UserController {
     public Result GetUser(){
 //        String username = user.getUsername();
 //        User user = service.findUserByUsername(username);
-        return Result.success();
+//        return Result.success();
+        return null;
     }
 
-    @ApiOperation("禁用或解封用户信息（更新用户状态）")
-    @GetMapping("/current")
-    public Result GetStatus(@RequestBody Integer id, String status){
-        service.updateUserStatus(id, status);
-        return Result.success();
-    }
+//    @ApiOperation("禁用或解封用户信息（更新用户状态）")
+//    @GetMapping("/current")
+//    public Result GetStatus(@RequestBody Integer id, String status){
+////        service.updateUserStatus(id, status);
+////        return Result.success();
+//        return null;
+//    }
 
 }
