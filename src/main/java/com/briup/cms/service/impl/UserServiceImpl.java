@@ -1,19 +1,23 @@
 package com.briup.cms.service.impl;
 
 
+import com.briup.cms.bean.Role;
 import com.briup.cms.bean.User;
 import com.briup.cms.config.CmsInfo;
 import com.briup.cms.dao.LoginDao;
+import com.briup.cms.dao.RoleDao;
 import com.briup.cms.dao.UserDao;
 import com.briup.cms.exception.ServiceException;
 import com.briup.cms.service.IUserService;
 import com.briup.cms.utils.JwtUtil;
 import com.briup.cms.utils.ResultCode;
+import jdk.net.SocketFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +31,29 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserDao dao;//获取spring自动创建的到层对象
 
+    @Autowired
+    private RoleDao roleDao;
+
     @Override
     public Page<User> getAll(Integer pageNum, Integer pageSize) throws ServiceException {
-        Page<User> userPage = dao.findAll(PageRequest.of(pageNum-1, pageSize));
+        Page<User> userPage = dao.findAll(PageRequest.of(pageNum - 1, pageSize));
         return userPage;
     }
 
     @Override
     public void saveOrUpdateUser(User user) throws ServiceException {
+        //逻辑1.是否存在该用户角色添加用户信息
+        Role role = roleDao.findById(user.getRole().getId()).orElse(null);
+        if (role == null) {
+            throw new RuntimeException("角色不存在");
+        }
+
+        //补充：对添加的数据库中的用户名唯一约束，必须代码判断并返回具体的逻辑
+
+        if (user.getId() == null) {//新增
+            user.setRegisterTime(new Date());
+            user.setStatus(CmsInfo.USER_STATUS_YES);
+        }
         dao.save(user);
     }
 
@@ -45,7 +64,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void updateUserStatus(Integer id, String status) throws ServiceException {
-        //自定义SQL语句实现更新状态
+        //自定义HQL语句实现更新状态
+        dao.updateStatusById(id, status);
 
     }
 
@@ -67,7 +87,7 @@ public class UserServiceImpl implements IUserService {
         }
         //1.方法执行成功，返回需要的token字符串
         Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("userId",user.getId());
+        userInfo.put("userId", user.getId());
         //put....根据其他实际情况进行设置
         String token = JwtUtil.sign(username, userInfo);
         return token;
@@ -75,7 +95,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User findUserByUsername(String username) throws ServiceException {
-        User userByName = dao.findByUsername(username);
-        return userByName;
+        User user = dao.findByUsername(username);
+        return user;
     }
 }

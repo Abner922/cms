@@ -1,6 +1,7 @@
 package com.briup.cms.bean;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,8 +40,10 @@ public class User {
 
     private String gender;
 
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")// 指定字符串转化为时间对象的字符串格式
     private Date birthday;
 
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")// 指定字符串转化为时间对象的字符串格式
     @Column(name = "register_time")
     private Date registerTime;
 
@@ -48,11 +51,11 @@ public class User {
     private String status;
 
     private String image;
-/*
-角色 与 用户的关系 1：N
-设置一个外键
- */
-    @OneToOne(cascade = CascadeType.ALL)
+    /*
+    角色 与 用户的关系 1：N
+    设置一个外键
+     */
+    @ManyToOne //默认效果 自动生成外键role_id 选择role表中的id作为外键
     @JoinColumn(name = "role_id")
     private Role role;
 

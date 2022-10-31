@@ -2,6 +2,7 @@ package com.briup.cms.web.controller;
 
 
 import com.briup.cms.bean.Role;
+import com.briup.cms.service.IRoleService;
 import com.briup.cms.service.impl.RoleServiceImpl;
 import com.briup.cms.utils.Result;
 import com.fasterxml.jackson.databind.deser.impl.NullsAsEmptyProvider;
@@ -27,7 +28,7 @@ import java.util.List;
 @RequestMapping("/auth/role")
 public class RoleController {
     @Autowired
-    private RoleServiceImpl service;
+    private IRoleService service;
 
     //新增或查询
     @PostMapping
