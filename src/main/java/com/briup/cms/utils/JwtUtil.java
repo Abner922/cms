@@ -18,14 +18,14 @@ public class JwtUtil {
 	/*
 	 * 过期时间（可自定义指定） 此处为30分钟
 	 */
-	private static final long EXPIRE_TIME = 300 * 60 * 1000;
+	private static final long EXPIRE_TIME = 30 * 60 * 1000;
 	/*
 	 * jwt密钥 （可自定义指定）
 	 */
 	private static final String SECRET = "jwt_secret";
 
 	/*
-	 * 该方法生成jwt字符串 30分钟后过期
+	 * 该方法生成jwt字符串 5分钟后过期
 	 * 
 	 * @param userId
 	 * 

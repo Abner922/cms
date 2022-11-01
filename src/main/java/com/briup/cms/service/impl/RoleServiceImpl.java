@@ -1,69 +1,68 @@
 package com.briup.cms.service.impl;
 
-
 import com.briup.cms.bean.Role;
+import com.briup.cms.dao.RoleDao;
 import com.briup.cms.exception.ServiceException;
 import com.briup.cms.service.IRoleService;
-import com.briup.cms.dao.RoleDao;
-import com.briup.cms.utils.Result;
 import com.briup.cms.utils.ResultCode;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 /**
- * @author SDX
- * @create 2022-10-26 0:24
+ * service层实现类：是由项目经理提供的业务设计
+ * @Author SDX
+ * @Date 2022/10/25
  */
-
-@Service
+@Service//创建service层bean对象，调用类的方法
 public class RoleServiceImpl implements IRoleService {
-
-    @Autowired//使用jpa实现dao层功能
+    //使用jpa实现dao层的功能
+    @Autowired
     private RoleDao dao;
 
     public Page<Role> findAll(Integer pageNum, Integer pageSize) throws ServiceException {
-        //使用dao对象调用方法实现功能
-        //jpa 中 默认第一页是0开始
-        Page<Role> page = dao.findAll(PageRequest.of(pageNum - 1, pageSize));
+        //jpa 默认第一页使用0表示 pageNum=5 :查询 5-1
+        Page<Role> page = dao.findAll(PageRequest.of(pageNum-1, pageSize));
         return page;
     }
 
-    //新增或修改角色
     public void saveOrUpdateRole(Role role) throws ServiceException {
-        //如果提交的角色名为空或空字符串，提示用户参数无效。
-        if (role.getName() == null || role.getName().equals("")) {
-            throw new ServiceException(ResultCode.PARAM_IS_INVALID);
+        //新增和修改 放同一个方法中：
+
+        //1.如果提交的角色名为空或空字符串，提示用户参数无效
+        String name = role.getName();
+        if(name == null || "".equals(name)){
+           throw new ServiceException(ResultCode.PARAM_IS_INVALID);
         }
         //2.如果提交角色名与数据库中角色名相同，提示用户数据已存在
-        Role role1 = dao.findByName(role.getName());
-//        if(role1==null){
-//            dao.save(role);
-//        }else {
-//            throw new RuntimeException("数据已存在");
-//        }
+        Role roledb = dao.findByName(name);
 
-        //判断名字是否重复时，如果是修改的话，要求自己和自己的名字重复
-        //新增时，判断查询到的用户不为null；在比较name
-        if (role1 != null && role1.getId() != role.getId() && role1.getName().equals(role.getName())) {
+        //当判断名字是否重复时，如果是修改的话，要求自己和自己的名称重复
+
+
+        //新增时，判断查询到的用户不为null,再比较name
+        if( roledb !=null && roledb.getId() != role.getId() && roledb.getName().equals(name)){
             throw new ServiceException(ResultCode.DATA_EXISTED);
         }
+
+
+        //修改： id=1 name=admin  des=xxxxx
+        //3.进行保存或更新
         dao.save(role);
     }
-
-    public void deleteRoleInBatch(List<Integer> ids) throws ServiceException {
-        //当执行该方法，不需要是否存在删除ID
-        dao.deleteAllById(ids);
+    public void deleteRoleInBatch( List<Integer> ids) throws ServiceException {
+        //批量删除： 遍历执行
+        //ids.forEach(id -> dao.deleteById(id)); //2
+        //当执行该方法，不需要判断是否存在删除id
+        dao.deleteAllByIdInBatch(ids); //   1in (1,2,3,4)
         //当执行该方法，需要先进行逻辑判断是否存在删除id 否则用户提示错误
-//        dao.deleteAllById(ids);
+        //dao.deleteAllById(ids);//多次执行delete语句  3
+        //扩展：事务操作：jpa 删除10条 当执行过程中出现异常sqlException
     }
-
-    public Role findByRoleName(String roleName) throws ServiceException {
-        Role role = dao.findByName(roleName);
-        return role;
-    }
-
 }

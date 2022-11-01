@@ -1,6 +1,5 @@
 package com.briup.cms.bean;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
@@ -9,9 +8,9 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
- * 实体类 对应cms_role
- * @author SDX
- * @create 2022-10-26 0:10
+ * jpa 实体类对应的数据库表cms_role
+ * @Author SDX
+ * @Date 2022/10/25
  */
 @Data
 @Entity
@@ -27,11 +26,8 @@ public class Role {
 
     private String description;
 
-    //(mappedBy = , fetch = , cascade = )
     @OneToMany
     @JoinColumn(name = "role_id")
-
-    //解决栈溢出方式一
-    //@JsonIgnore // 转换为JSON字符串时，忽略掉不需要的属性
+    //@JsonIgnore// 转换为json字符串时，忽略掉不需要的属性
     private List<User> users;
 }

@@ -14,6 +14,4 @@ public interface IRoleService {
 	void saveOrUpdateRole(Role role)throws ServiceException;
 	//批量删除角色信息
 	void deleteRoleInBatch(List<Integer> ids)throws ServiceException;
-	//根据名字查询角色
-	Role findByRoleName(String RoleName) throws ServiceException;
 }

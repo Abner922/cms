@@ -9,7 +9,12 @@ import com.briup.cms.bean.Comment;
 import com.briup.cms.exception.ServiceException;
 
 public interface IArticleService {
-	//发布资讯或者编辑资讯
+	/*
+	  发布资讯或者编辑资讯
+	  思考：
+	  当用户新增咨询信息时，没有将用户id或用户名作为参数进行传递
+	  利用ThreadLocal对象实现将获取用户的信息操作代码，编写在service层获取。
+	 */
 	void saveOrUpdateArticle(Article article)throws ServiceException;
 	//分页获取当前用户的所有资讯
 	Page<Article> findAllByUser(Integer pageNum,Integer pageSize)throws ServiceException;
