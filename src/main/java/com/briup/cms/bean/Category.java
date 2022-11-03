@@ -1,7 +1,9 @@
 package com.briup.cms.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -15,6 +17,8 @@ import java.util.List;
  * @Author SDX
  * @Date 2022/10/31
  */
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -41,11 +45,18 @@ public class Category {
     //@ManyToOne
     //private Category parent_id;
 
-    @OneToMany(mappedBy = "parent")
+    //删除父级栏目时，对应的子栏目一起删除
+    @OneToMany(mappedBy = "parent",cascade = CascadeType.REMOVE)
     private List<Category> children;//1对多
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="parent_id")
     @JsonIgnore //转换json字符串时，不进行序列化
     private Category parent;
+
+    //为了实现删除栏目时，将对应的资讯信息使用的外键值 set null
+    @OneToMany//1个栏目对应多个资讯信息
+    @JoinColumn(name = "category_id")
+    private List<Article> articles;
+
 }

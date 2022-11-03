@@ -67,7 +67,7 @@ public class RoleController {
         service.deleteRoleInBatch(ids);
         return Result.success();
     }*/
-    @ApiOperation("批量删除")
+    @ApiOperation(value = "批量删除", notes = "删除角色id时，不能删除用户信息，只能实现设置为null")
     @DeleteMapping("/batch")
     public Result deletByBatch(Integer[] ids){
         service.deleteRoleInBatch(Arrays.asList(ids));

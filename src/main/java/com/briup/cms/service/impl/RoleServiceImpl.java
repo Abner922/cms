@@ -57,10 +57,13 @@ public class RoleServiceImpl implements IRoleService {
         dao.save(role);
     }
     public void deleteRoleInBatch( List<Integer> ids) throws ServiceException {
+
+        ids.forEach(id -> dao.deleteById(id));
+
         //批量删除： 遍历执行
         //ids.forEach(id -> dao.deleteById(id)); //2
         //当执行该方法，不需要判断是否存在删除id
-        dao.deleteAllByIdInBatch(ids); //   1in (1,2,3,4)
+//        dao.deleteAllByIdInBatch(ids); //   1in (1,2,3,4)
         //当执行该方法，需要先进行逻辑判断是否存在删除id 否则用户提示错误
         //dao.deleteAllById(ids);//多次执行delete语句  3
         //扩展：事务操作：jpa 删除10条 当执行过程中出现异常sqlException

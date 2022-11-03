@@ -11,4 +11,5 @@ public interface CmsInfo {
     String USER_STATUS_YES = "0";
     String USER_STATUS_QUERY = "3";
     String USER_STATUS_UPDATE = "2";
+    Integer ARTICLE_STATUS_INIT = 0;
 }

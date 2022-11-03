@@ -1,6 +1,7 @@
 package com.briup.cms.web.interceptor;
 
 import com.briup.cms.utils.JwtUtil;
+import com.briup.cms.utils.UserInfoUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -27,6 +28,8 @@ public class JwtInterceptor implements HandlerInterceptor {
         //3.当用户提供了token字符串，但无效的：超时(长时间登录)，不合法的字符串(非系统用户)
         JwtUtil.checkSign(token);
 
+        //4.当通过jwt验证之后，需要把用户信息保存在ThreadLocal中
+        UserInfoUtil.setUserInfo(JwtUtil.getInfo(token));
         return true;
     }
 }

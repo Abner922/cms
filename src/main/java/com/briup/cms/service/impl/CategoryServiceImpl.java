@@ -32,10 +32,23 @@ public class CategoryServiceImpl implements ICategoryService {
     //新增或修改操作
     public void saveOrUpdateCategory(Category category) throws ServiceException {
         //注意：当主键值不存在，jpa将修改操作改成新增操作
-        Category cate = dao.findById(category.getId()).orElse(null);
+        /*Category cate = dao.findById(category.getId()).orElse(null);
         if(category.getId() != 0 && cate == null){
             throw new ServiceException(ResultCode.DATA_NONE);
+        }*/
+        //简化
+//            if(category.getId() != null && dao.findById(category.getId()).orElse(null) == null){
+//                throw new ServiceException(ResultCode.DATA_NONE);
+//            }
+
+        //简化2
+        //但修改操作时，判断是否存在该栏目信息，如果不存在抛出异常
+        Integer id = category.getId();
+        if (id != null) {
+            //当返回的结果为null时，抛出异常
+            dao.findById(id).orElseThrow(() -> new ServiceException(ResultCode.DATA_NONE));
         }
+
         //新增或修改目录信息，保证目录名称是不重复的。
 
         // 扩展：设置相同层级(parent_id相同的目录)的序列号必须保证不重复
@@ -58,7 +71,13 @@ public class CategoryServiceImpl implements ICategoryService {
 
         //扩展： 需要先解决外键约束问题，然后再删除对应的主键值。
 
-        dao.deleteAllByIdInBatch(ids);
+//        dao.deleteAllByIdInBatch(ids);
+
+        /*
+               实现效果：
+               利用jpa中的级联操作，当删除一个栏目时，对应的子栏目要求必须删除，保留栏目对应的资讯信息
+         */
+        ids.forEach(id->dao.deleteById(id));
     }
 
     public void updateCategoryNo(Integer id, int no) throws ServiceException {

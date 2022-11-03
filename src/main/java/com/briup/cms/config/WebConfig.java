@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @Author SDX
  * @Date 2022/10/27
  */
-//@Configuration
+@Configuration
 public class WebConfig implements WebMvcConfigurer {
     public WebConfig() {
         System.out.println("创建一个配置类对象");

@@ -49,7 +49,7 @@ public class CategoryController {
 
 
      */
-    @ApiOperation("批量删除目录信息")
+    @ApiOperation(value = "批量删除目录信息")
     @DeleteMapping
     public Result deleteByBatch(@RequestBody List<Integer> ids){
         service.deleteCategoryInBatch(ids);

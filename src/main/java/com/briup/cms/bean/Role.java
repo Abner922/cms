@@ -26,8 +26,10 @@ public class Role {
 
     private String description;
 
+
+    //当删除角色时，对应的外键值信息设置为null
     @OneToMany
     @JoinColumn(name = "role_id")
-    //@JsonIgnore// 转换为json字符串时，忽略掉不需要的属性
+    @JsonIgnore// 转换为json字符串时，忽略掉不需要的属性
     private List<User> users;
 }

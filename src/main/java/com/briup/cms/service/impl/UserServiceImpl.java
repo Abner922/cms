@@ -52,7 +52,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     public void deleteUserInBatch(List<Integer> ids) throws ServiceException {
-        dao.deleteAllByIdInBatch(ids);
+        ids.forEach(id -> dao.deleteById(id));
     }
 
     public void updateUserStatus(Integer id, String status) throws ServiceException {
