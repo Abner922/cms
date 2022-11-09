@@ -17,6 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 public class JwtInterceptor implements HandlerInterceptor {
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //当浏览器发送的是预检请求，不需要进行拦截
+        if("OPTION".equals(request.getMethod())){
+            return true;
+        }
+
+
         //1.获取用户的请求头信息：token
         String token = request.getHeader("token");
 

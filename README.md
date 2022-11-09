@@ -6,7 +6,7 @@
 
 3.  看点资讯管理系统采用前后端分离开发的技术开发，后端采用三层架构
 4.  cms系统主要分为：资讯模块 栏目(分类)模块 评论模块 用户模块 角色模块
-5.  cms系统基于SpringMVC+springBoot+springdata+jpa+swagger+jwt+maven+mysql
+5.  cms系统基于SpringMVC+springBoot+springdata-jpa+swagger+jwt+maven+mysql
 
 ## cms-day02:
    1. 项目搭建
@@ -23,3 +23,5 @@
    1.实现资讯模块
      举例：通过使用ThreadLocal实现用户信息
    2.实现评论模块
+## cms-day06
+   1.实现跨域操作
